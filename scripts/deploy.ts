@@ -21,6 +21,7 @@ const EIP712_SAFE_TX_TYPES = {
 }
 
 const main = async (): Promise<void> => {
+  //we first need to get the chainId of our project
   const params = await getProjectParams(apikey)
 
   await createWallet(apikey, params.chainId)
@@ -42,6 +43,7 @@ const createWallet = async (apikey: string, chainId: string): Promise<void> => {
   const ownerAddress = signer.address
   console.log(`Owner address (EOA): ${ownerAddress}`)
 
+  //we then init the wallet to get our walletAddress
   const walletAddress = (
     await sendPostRequest(
       `${apiUrl}/wallets/init`,
