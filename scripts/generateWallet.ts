@@ -1,8 +1,11 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
+
 import axios from 'axios'
 import { BigNumber, ethers } from 'ethers'
 
 const apiUrl = 'https://api.connect.cometh.io'
-const apikey = 'YOUR_API_KEY'
+const apikey = process.env.API_KEY
 
 const counterAddress = '0x3633a1be570fbd902d10ac6add65bb11fc914624'
 const EIP712_SAFE_TX_TYPES = {
@@ -21,6 +24,7 @@ const EIP712_SAFE_TX_TYPES = {
 }
 
 const main = async (): Promise<void> => {
+  if(!apikey) throw "Please set your API Key first"
   //we first need to get the chainId of our project
   const params = await getProjectParams(apikey)
 

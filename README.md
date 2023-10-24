@@ -1,4 +1,24 @@
-# How to Run
+# How It Works
+
+The objective of this documentation is to familiarize you with Cometh Connect, with a particular focus on its API. By the end of this tutorial, you'll have the skills to create a wallet and execute transactions seamlessly through our API.
+
+**Note:** Don't forget to explore our Connect SDK, which encapsulates most of the logic discussed here.
+
+To begin, you'll need an API key, as it's a mandatory requirement for any interaction with the Connect API. To obtain your API key, please create a project in the Cometh Dashboard. By default, this example uses chainId 80001 (Polygon Mumbai), so when setting up your project, please select this network. 
+
+## General Info
+
+Here are some of the parameters we will use:
+- API URL: https://api.connect.cometh.io/
+- ChainId: 80001
+
+The chainId is linked to your API key; one project can only be on one chain. If you need to use multiple chains, please use different API keys.
+
+
+
+**Note:** You can approach this tutorial in two ways: either by running and reviewing the TypeScript file located at scripts/deploy.ts, or by following the instructions provided in this README and executing the curl commands listed herein. Both methods implement a similar logic: obtaining your project's parameters, creating a wallet, and executing a transaction.
+
+# Use generateWallet script
 
 ## Installation
 
@@ -8,28 +28,26 @@ yarn install
 
 ## Running
 
-1. Set your API Key in `scripts/deploy.ts`.
+1. Set your API Key in `.env`.
 2. Deploy a wallet using:
 
 ```bash
-yarn deploy
+yarn generateWallet
 ```
 
-# How It Works
+The result logs should look similar to:
+```
+Owner address (EOA): 0x240011779626EeCE7c899cb02f017530A32Dd411
+Wallet we are about to create: 0x058aB302ED2F8776614aaF6948652BA29F88e45f
+Deployment transaction sent to relayer with relayId 0xcdc61283c228081dd1bea5e34ba95fc3a77e5e8f7acd29155e80f4f428b8beae
+```
 
-The objective of this documentation is to familiarize you with Cometh Connect, with a particular focus on its API. By the end of this tutorial, you'll have the skills to create a wallet and execute transactions seamlessly through our API.
+Please wait for a moment until the transaction is confirmed. Once confirmed, you should be able to see your wallet in the blockchain explorer.
 
-**Note:** Don't forget to explore our Connect SDK, which encapsulates most of the logic discussed here.
+**Note:** The relayId is not your transaction ID, so attempting to search for it in the explorer won't yield any results. Instead, search for your wallet address, and you should find the transaction that created it.
 
-To begin, you'll need an API key, as it's a mandatory requirement for any interaction with the Connect API. To obtain your API key, please reach out to us via our Discord channel.
 
-## General Info
-
-Here are some of the parameters we will use:
-- API URL: https://api.connect.cometh.io/
-- ChainId: 80001 (this is linked to your API key; one project can only be on one chain. If you need to use multiple chains, please use different API keys).
-
-**Note:** You can approach this tutorial in two ways: either by following the instructions provided in this README and executing the curl commands listed herein, or by reviewing the TypeScript file located at scripts/deploy.ts. Both methods implement a similar logic: obtaining your project's parameters, creating a wallet, and executing transactions.
+# Use curl queries
 
 ## Get Project Parameters (Optional)
 
@@ -83,15 +101,15 @@ Here is the format of a transaction when you want to use your wallet:
 
 ```javascript
 const safeTxData = {
-   to: counterAddress,
+   to: '0x3633a1be570fbd902d10ac6add65bb11fc914624',
    value: '0',
    data: ethers.utils.id('count()').slice(0, 10),
    operation: '0',
    safeTxGas: '0',
    baseGas: '0',
    gasPrice: '0',
-   gasToken: ethers.constants.AddressZero,
-   refundReceiver: ethers.constants.AddressZero,
+   gasToken: '0x0000000000000000000000000000000000000000',
+   refundReceiver: '0x0000000000000000000000000000000000000000',
    nonce: '0'
  }
 ```
@@ -143,9 +161,13 @@ const dataToSend = { ...safeTxData, signatures }
 
 ### Send the Transaction
 
+With everything set up, you can now send the transaction using the following request. Simply include your API Key in the header, the signature generated in the previous step in the request body, and your wallet address in the request parameters.
+
+**Note:** All the information in the body is the `dataToSend` we prepared in the previous step
+
 **Request:**
 ```bash
-curl -X POST -H "apikey: YOUR_API_KEY" -H "Content-Type: application/json" -d 'dataToSend' https://api.connect.cometh.io/wallets/YOUR_WALLET_ADDRESS/relay
+curl -X POST -H "apikey: YOUR_API_KEY" -H "Content-Type: application/json" -d '{"to": "0x3633a1be570fbd902d10ac6add65bb11fc914624","value": "0","data": "0x06661abd","operation": "0","safeTxGas": "0","baseGas": "0","gasPrice": "0","gasToken": "0x0000000000000000000000000000000000000000","refundReceiver": "0x0000000000000000000000000000000000000000","nonce": "0","signatures": "THE_SIGNATURE_PREPARED_EALIER"}' https://api.connect.cometh.io/wallets/YOUR_WALLET_ADDRESS/relay
 ```
 
 **Response:**
