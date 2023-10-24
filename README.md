@@ -105,7 +105,7 @@ So the only values we are interested in are:
 
 ### Sign the Transaction
 
-For signing the transaction, we will utilize the `signTypedData` function with our signer. This function takes three essential parameters:
+For signing the transaction, we will utilize the `signTypedData` function with our signer. This function takes three parameters:
 
 - `domain`: This includes the `chainId` and `verifyingContract` (which is our wallet address).
 - `types`: A constant from EIP 712.
@@ -114,7 +114,7 @@ For signing the transaction, we will utilize the `signTypedData` function with o
 ```javascript
 const signatures = await signer._signTypedData(
     {
-      chainId,
+      chainId: 80001,
       verifyingContract: walletAddress
     },
     {
@@ -152,9 +152,8 @@ curl -X POST -H "apikey: YOUR_API_KEY" -H "Content-Type: application/json" -d 'd
 ```json
 {
   "success": true,
-  "safeTxHash": "0xYOUR_RELAYER_TX_HASH"
+  "safeTxHash": "0x_YOUR_RELAYER_TX_HASH"
 }
 ```
 
 It's worth noting that the `safeTxHash` is not the same as the transaction hash you'll find on the blockchain. Instead, it serves as an identifier used by the relayer to track and manage your transaction.
-```
