@@ -163,11 +163,15 @@ const dataToSend = { ...safeTxData, signatures }
 
 With everything set up, you can now send the transaction using the following request. Simply include your API Key in the header, the signature generated in the previous step in the request body, and your wallet address in the request parameters.
 
-**Note:** All the information in the body is the `dataToSend` we prepared in the previous step
+**Note:** You can easily acquire a new wallet address and its associated signature by executing the command below:
+
+```bash
+yarn getSignature
+```
 
 **Request:**
 ```bash
-curl -X POST -H "apikey: YOUR_API_KEY" -H "Content-Type: application/json" -d '{"to": "0x3633a1be570fbd902d10ac6add65bb11fc914624","value": "0","data": "0x06661abd","operation": "0","safeTxGas": "0","baseGas": "0","gasPrice": "0","gasToken": "0x0000000000000000000000000000000000000000","refundReceiver": "0x0000000000000000000000000000000000000000","nonce": "0","signatures": "THE_SIGNATURE_PREPARED_EALIER"}' https://api.connect.cometh.io/wallets/YOUR_WALLET_ADDRESS/relay
+curl -X POST -H "apikey: YOUR_API_KEY" -H "Content-Type: application/json" -d '{"to": "0x3633a1be570fbd902d10ac6add65bb11fc914624","value": "0","data": "0x06661abd","operation": "0","safeTxGas": "0","baseGas": "0","gasPrice": "0","gasToken": "0x0000000000000000000000000000000000000000","refundReceiver": "0x0000000000000000000000000000000000000000","nonce": "0","signatures": "YOUR_SIGNATURES"}' https://api.connect.cometh.io/wallets/YOUR_WALLET_ADDRESS/relay
 ```
 
 **Response:**

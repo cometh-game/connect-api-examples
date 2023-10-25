@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "build": "rm -rf ./build && tsc && tsc-alias",
-    "generateWallet": "yarn run build && node build/generateWallet.js"
+    "generateWallet": "yarn run build && node build/generateWallet.js",
+    "getSignature": "yarn run build && node build/getSignature.js"
   },
   "repository": {
     "type": "git",
